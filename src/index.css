@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  /* Define custom Bluish Gray / Steel Blue theme mapped to the zinc palette */
+  --color-zinc-50: #f8fafc;
+  --color-zinc-100: #f1f5f9;
+  --color-zinc-200: #e2e8f0;
+  --color-zinc-250: #ccd6e2;
+  --color-zinc-300: #cbd5e1;
+  --color-zinc-400: #94a3b8;
+  --color-zinc-450: #64748b;
+  --color-zinc-500: #576880;
+  --color-zinc-600: #475569;
+  --color-zinc-650: #334155;
+  --color-zinc-700: #1e293b;
+  --color-zinc-750: #253347;
+  --color-zinc-800: #1b2434;
+  --color-zinc-850: #131b28;
+  --color-zinc-900: #0f172a;/* Brightened to beautiful deep slate blue-gray */
+  --color-zinc-950: #0b0f19;/* Slightly brighter and cool base navy-gray */
+
+  /* Make focus effects highlight in bright cool accent bluish gray */
+  --color-amber-550: #60a5fa;
+  --color-amber-600: #3b82f6;
+  --color-amber-955: #1d4ed8;
+}

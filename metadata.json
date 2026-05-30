@@ -1,0 +1,6 @@
+{
+  "name": "Speed Typing Game",
+  "description": "A fast-paced single letter typing reaction game. Type the shown letter before the timer runs out. Features Relaxed, Fixed Timer, and Challenge modes with persistent high scores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
