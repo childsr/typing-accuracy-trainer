@@ -65,8 +65,6 @@ export default function StatsView({
   const correctLogs = logs.filter((l) => l.correct);
   const avgReactionTime = 
     correctLogs.length > 0
-      // ? Math.round(correctLogs.reduce((acc, curr) => acc + curr.reactionTimeMs, 0) / correctLogs.length)
-      // : 0;
       ? (lastSession.totalTimeMs / correctLogs.length).toFixed(0)
       : "N/A";
 

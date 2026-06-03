@@ -184,16 +184,7 @@ export default function App() {
       </main>
 
 
-      {/* Footer bar */}
-      <footer className="py-3.5 border-t border-zinc-900/60 bg-zinc-950/30 text-center text-[10px] text-zinc-650 font-mono mt-auto select-none">
-        <div className="max-w-2xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <span>LATENCY_CALIBRATED_ENGINE // 2026</span>
-          <div className="flex gap-4">
-            <span>STRICT_ERR_MATCHING: ON</span>
-            <span>LATENCY: CALIBRATED</span>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }

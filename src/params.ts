@@ -20,9 +20,9 @@ export const CHAR_SETS = [
 export const STORAGE_KEY_HISTORY = 'speed_typer_history_v2';
 export const HISTORY_LENGTH = 20;
 
-export const INSTANT_FEEDBACK_DURATION_MS = 200;
+export const INSTANT_FEEDBACK_DURATION_MS = 100;
 
-export const SPRINT_CHAR_COUNT = 30; // Target length for 30-Letter Sprint mode
+export const SPRINT_CHAR_COUNT = 20; // Target length for Sprint mode
 
 // Dynamic timer speed configuration
 export const TIMER_START_MS = 3000;
@@ -32,7 +32,7 @@ export const TIMER_REDUCTION_PER_STREAK_MS = 100; // Decreases limit by 100ms on
 const TIMER_CURVE_SHALLOWNESS = 6.25;
 /**
  * Calculates current time limit based on the number of letters typed so far (n/streak).
- * The limit decreases dynamically as the streak increases, with a floor of TIMER_MIN_MS.
+ * The limit decreases dynamically as the streak increases.
  */
 export function getTimerLimitMs(n: number): number {
   // return Math.max(TIMER_MIN_MS, TIMER_START_MS - n * TIMER_REDUCTION_PER_STREAK_MS);

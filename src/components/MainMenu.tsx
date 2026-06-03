@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PlayerHistory, GameMode } from '../types';
 import { CHAR_SETS, SPRINT_CHAR_COUNT } from '../params';
 import { calculateLetterStats, getCharacterWeights } from '../utils/stats';
@@ -22,6 +22,7 @@ export default function MainMenu({
   onStartGame,
   onResetStats,
 }: MainMenuProps) {
+  const [isCharSetCollapsed, setIsCharSetCollapsed] = useState(true);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
@@ -72,7 +73,7 @@ export default function MainMenu({
       {/* Game Mode Choice */}
       <div className="border border-zinc-800 bg-zinc-900 p-4 rounded flex flex-col gap-3">
         <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold border-b border-zinc-800 pb-1.5">
-          [01] SELECT CHALLENGE MODE
+          CHALLENGE MODE
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <button
@@ -85,12 +86,12 @@ export default function MainMenu({
             }`}
           >
             <span className="font-bold text-xs uppercase tracking-wider">
-              Survival [Decaying Timer]
+              Survival
             </span>
             <span className={`text-[10px] leading-snug font-medium ${
               selectedGameMode === 'SURVIVAL' ? 'text-zinc-700' : 'text-zinc-500'
             }`}>
-              Decaying dynamic timer speeded up per streak increment. Fail if timer expires.
+              Timer gets shorter after each correct character. Game over on incorrect character or if timer expires.
             </span>
           </button>
 
@@ -104,12 +105,12 @@ export default function MainMenu({
             }`}
           >
             <span className="font-bold text-xs uppercase tracking-wider">
-              Sprint [No Timer]
+              Sprint
             </span>
             <span className={`text-[10px] leading-snug font-medium ${
               selectedGameMode === 'SPRINT' ? 'text-zinc-700' : 'text-zinc-500'
             }`}>
-              No target timers! Type exactly {SPRINT_CHAR_COUNT} keys. Total sprint duration is the benchmark. Single mismatch fails.
+              No timer. {SPRINT_CHAR_COUNT} keys. Total sprint duration is the benchmark. A single incorrect character fails.
             </span>
           </button>
         </div>
@@ -117,39 +118,46 @@ export default function MainMenu({
 
       {/* Main interactive setups */}
       <div className="border border-zinc-800 bg-zinc-900 p-4 rounded flex flex-col gap-3">
-        <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold border-b border-zinc-800 pb-1.5">
-          [02] TARGET CHARACTER SET
-        </span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {CHAR_SETS.map((set) => {
-            const isSelected = selectedCharSetId === set.id;
-            return (
-              <button
-                id={`charset-select-${set.id}`}
-                key={set.id}
-                onClick={() => setSelectedCharSetId(set.id)}
-                className={`w-full text-left p-2 rounded border flex items-center justify-between cursor-pointer transition-colors ${
-                  isSelected
-                    ? 'bg-zinc-100 border-zinc-200 text-zinc-950 font-bold'
-                    : 'bg-zinc-950/40 border-zinc-850 text-zinc-450 hover:border-zinc-750 hover:text-zinc-200'
-                }`}
-              >
-                <span>{set.name}</span>
-                <span className={`text-[9px] font-mono select-none px-1.5 py-0.5 rounded ${
-                  isSelected ? 'bg-zinc-200 text-zinc-950' : 'bg-zinc-900 text-zinc-500'
-                }`}>
-                  {set.chars.length} KEYS
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <button 
+          onClick={() => setIsCharSetCollapsed(!isCharSetCollapsed)}
+          className="w-full flex justify-between items-center text-left text-[10px] uppercase tracking-wider text-zinc-400 font-bold border-b border-zinc-800 pb-1.5 cursor-pointer hover:text-zinc-300"
+        >
+          <span>CHARACTER SET{isCharSetCollapsed && ` - ${CHAR_SETS.find(set => set.id === selectedCharSetId)?.name}`}</span>
+          <span>{isCharSetCollapsed ? '[+]' : '[-]'}</span>
+        </button>
+        
+        {!isCharSetCollapsed && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {CHAR_SETS.map((set) => {
+              const isSelected = selectedCharSetId === set.id;
+              return (
+                <button
+                  id={`charset-select-${set.id}`}
+                  key={set.id}
+                  onClick={() => setSelectedCharSetId(set.id)}
+                  className={`w-full text-left p-2 rounded border flex items-center justify-between cursor-pointer transition-colors ${
+                    isSelected
+                      ? 'bg-zinc-100 border-zinc-200 text-zinc-950 font-bold'
+                      : 'bg-zinc-950/40 border-zinc-850 text-zinc-450 hover:border-zinc-750 hover:text-zinc-200'
+                  }`}
+                >
+                  <span>{set.name}</span>
+                  <span className={`text-[9px] font-mono select-none px-1.5 py-0.5 rounded ${
+                    isSelected ? 'bg-zinc-200 text-zinc-950' : 'bg-zinc-900 text-zinc-500'
+                  }`}>
+                    {set.chars.length} KEYS
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Stats container */}
       <div className="border border-zinc-800 bg-zinc-900 p-4 rounded flex flex-col gap-3">
         <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold border-b border-zinc-800 pb-1.5">
-          [03] BENCHMARK_METRICS
+          STATS
         </span>
         <div className="grid grid-cols-3 gap-2 text-center text-xs">
           <div className="p-2 bg-zinc-950 rounded border border-zinc-850">
@@ -171,7 +179,7 @@ export default function MainMenu({
         {struggleLetters.length > 0 && (
           <div className="border border-zinc-850/60 bg-zinc-950/20 p-3 rounded flex flex-col gap-1.5 mt-1">
             <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold border-b border-zinc-850 pb-1 select-none">
-              [ADAPTIVE] HISTORICAL WEAK SPOTS (MORE FREQUENT)
+              HISTORICAL WEAK SPOTS (MORE FREQUENT)
             </span>
             <div className="grid grid-cols-5 gap-1.5 text-center">
               {struggleLetters.map((item) => (
