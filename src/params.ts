@@ -18,11 +18,11 @@ export const CHAR_SETS = [
 ];
 
 export const STORAGE_KEY_HISTORY = 'speed_typer_history_v2';
-export const HISTORY_LENGTH = 20;
+export const HISTORY_LENGTH = 100;
 
 export const INSTANT_FEEDBACK_DURATION_MS = 100;
 
-export const SPRINT_CHAR_COUNT = 20; // Target length for Sprint mode
+export const SPRINT_CHAR_COUNT = 30; // Target length for Sprint mode
 
 // Dynamic timer speed configuration
 export const TIMER_START_MS = 3000;
