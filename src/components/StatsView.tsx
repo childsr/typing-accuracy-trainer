@@ -63,8 +63,8 @@ export default function StatsView({
   const recordLabel = isSprintMode ? 'NEW BEST SPRINT' : 'NEW MAX STREAK';
 
   const correctLogs = logs.filter((l) => l.correct);
-  const avgReactionTime = 
-    correctLogs.length > 0
+  const avgReactionTime =
+    (correctLogs.length > 0 && lastSession.totalTimeMs)
       ? (lastSession.totalTimeMs / correctLogs.length).toFixed(0)
       : "N/A";
 
@@ -85,7 +85,7 @@ export default function StatsView({
 
   const troubleKeysList = Object.entries(troubleKeysMap)
     .map(([char, stats]) => {
-      const avgTime = stats.count - stats.incorrectCount > 0 
+      const avgTime = stats.count - stats.incorrectCount > 0
         ? Math.round(stats.sumReactionTime / (stats.count - stats.incorrectCount))
         : 9999;
       return {
@@ -134,14 +134,14 @@ export default function StatsView({
   });
 
   // Custom texts based on gameMode outcomes
-  const titleText = isSprintMode 
-    ? (isCompletedSprint ? '[SPRINT_COMPLETED]' : '[SPRINT_FAILED]') 
+  const titleText = isSprintMode
+    ? (isCompletedSprint ? '[SPRINT_COMPLETED]' : '[SPRINT_FAILED]')
     : '[SESSION_COMPLETED]';
   const descriptionText = isSprintMode
-    ? (isCompletedSprint 
-        ? 'Incredible! You completed all 30 characters of the sprint successfully.' 
-        : `Sprint failed. Mistake made at position ${streak + 1} of 30.`
-      )
+    ? (isCompletedSprint
+      ? 'Incredible! You completed all 30 characters of the sprint successfully.'
+      : `Sprint failed. Mistake made at position ${streak + 1} of 30.`
+    )
     : 'Reflex speed diagnostics compiled. All latency levels mapped below.';
 
   return (
@@ -173,9 +173,8 @@ export default function StatsView({
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-center">
             {/* Box 1 */}
             {isSprintMode ? (
-              <div className={`p-4 rounded border flex flex-col justify-center items-center ${
-                isCompletedSprint ? 'bg-emerald-950/40 border-emerald-800/80' : 'bg-rose-950/30 border-rose-900/50'
-              }`}>
+              <div className={`p-4 rounded border flex flex-col justify-center items-center ${isCompletedSprint ? 'bg-emerald-950/40 border-emerald-800/80' : 'bg-rose-950/30 border-rose-900/50'
+                }`}>
                 <span className="text-[10px] text-zinc-500 block uppercase tracking-wider font-semibold select-none">SPRINT STATUS</span>
                 <span className={`text-sm font-black mt-1 font-sans ${isCompletedSprint ? 'text-green-400' : 'text-red-400'}`}>
                   {isCompletedSprint ? 'COMPLETED' : 'FAILED'}
@@ -192,13 +191,12 @@ export default function StatsView({
 
             {/* Box 2 */}
             {isSprintMode ? (
-              <div className={`p-4 rounded border flex flex-col justify-center items-center ${
-                isNewSprintRecord ? 'bg-blue-950/40 border-blue-600/70 animate-pulse' : 'bg-zinc-950/40 border-zinc-850'
-              }`}>
+              <div className={`p-4 rounded border flex flex-col justify-center items-center ${isNewSprintRecord ? 'bg-blue-950/40 border-blue-600/70 animate-pulse' : 'bg-zinc-950/40 border-zinc-850'
+                }`}>
                 <span className="text-[10px] text-zinc-500 block uppercase tracking-wider font-semibold select-none">TOTAL SPRINT TIME</span>
                 <span className="text-2xl font-black mt-1 font-sans text-blue-400">
-                  {isCompletedSprint && lastSession?.totalTimeMs !== undefined 
-                    ? `${(lastSession.totalTimeMs / 1000).toFixed(2)}s` 
+                  {isCompletedSprint && lastSession?.totalTimeMs !== undefined
+                    ? `${(lastSession.totalTimeMs / 1000).toFixed(2)}s`
                     : 'N/A'
                   }
                 </span>
@@ -217,7 +215,6 @@ export default function StatsView({
             <div className="p-4 bg-zinc-950/40 rounded border border-zinc-850 col-span-2 md:col-span-1 flex flex-col justify-center items-center">
               <span className="text-[10px] text-zinc-500 block uppercase tracking-wider font-semibold select-none">AVG LATENCY</span>
               <span className="text-2xl font-black text-zinc-200 mt-1 font-sans">{avgReactionTime}ms</span>
-              <span className="text-[8px] text-zinc-400 block mt-1.5 uppercase font-medium">TACTILE REFLEX</span>
             </div>
           </div>
         </div>
@@ -264,14 +261,14 @@ export default function StatsView({
                       </g>
                     );
                   })}
-                  
-                  <line 
-                    x1={chartPaddingLeft} 
-                    y1={chartHeight - chartPaddingBottom} 
-                    x2={chartWidth - chartPaddingRight} 
-                    y2={chartHeight - chartPaddingBottom} 
-                    stroke="#64748b" 
-                    strokeWidth="1" 
+
+                  <line
+                    x1={chartPaddingLeft}
+                    y1={chartHeight - chartPaddingBottom}
+                    x2={chartWidth - chartPaddingRight}
+                    y2={chartHeight - chartPaddingBottom}
+                    stroke="#64748b"
+                    strokeWidth="1"
                   />
                 </svg>
               </div>

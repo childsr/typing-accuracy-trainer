@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { KeystrokeLog, GameStats, GameMode } from '../types';
-import { 
-  getTimerLimitMs, 
+import {
+  getTimerLimitMs,
   INSTANT_FEEDBACK_DURATION_MS,
   SPRINT_CHAR_COUNT
 } from '../params';
@@ -92,14 +92,14 @@ export default function GameScreen({
           clearInterval(activeTimerRef.current);
           setFeedbackEffect('error');
           playIncorrectSound();
-          
+
           // Register penalty end keystroke
           logsRef.current.push({
             char: nextChar,
             reactionTimeMs: limitMs,
             correct: false,
           });
-          
+
           setTimeout(() => {
             onGameEnd(currentStreak, logsRef.current, 'SURVIVAL', false);
           }, INSTANT_FEEDBACK_DURATION_MS);
@@ -135,7 +135,7 @@ export default function GameScreen({
       if (gameMode === 'SPRINT' && nextStreak === SPRINT_CHAR_COUNT) {
         const totalDuration = Math.round(performance.now() - gameStartTimestampRef.current);
         if (activeTimerRef.current) clearInterval(activeTimerRef.current);
-        
+
         setTimeout(() => {
           onGameEnd(nextStreak, logsRef.current, 'SPRINT', true, totalDuration);
         }, INSTANT_FEEDBACK_DURATION_MS);
@@ -157,10 +157,11 @@ export default function GameScreen({
       });
 
       if (activeTimerRef.current) clearInterval(activeTimerRef.current);
-      
+
       setTimeout(() => {
         if (gameMode === 'SPRINT') {
-          onGameEnd(streak, logsRef.current, 'SPRINT', false, undefined);
+          const totalDuration = Math.round(performance.now() - gameStartTimestampRef.current);
+          onGameEnd(streak, logsRef.current, 'SPRINT', false, totalDuration);
         } else {
           onGameEnd(streak, logsRef.current, 'SURVIVAL', false);
         }
@@ -186,7 +187,7 @@ export default function GameScreen({
 
       const charCode = e.key.toUpperCase().charCodeAt(0);
       const isAlphaNum = (charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90);
-      
+
       if (isAlphaNum) {
         processKeyHit(e.key);
       }
@@ -236,7 +237,7 @@ export default function GameScreen({
             PRESS [SPACEBAR] TO BEGIN
           </div>
           <p className="text-[11px] text-zinc-500 leading-relaxed max-w-sm mx-auto">
-            {gameMode === 'SPRINT' 
+            {gameMode === 'SPRINT'
               ? 'Complete exactly 30 keys as quick as possible with no single mistake. Ticking timer limit is disabled!'
               : 'Decaying dynamic target timer will tighten up as streak is increased. Maintain the streak!'
             }
@@ -300,7 +301,7 @@ export default function GameScreen({
 
       {/* Target core frame */}
       <div className={`w-full flex flex-col items-center gap-4 border p-6 rounded ${cardBorder}`}>
-        
+
         {gameMode === 'SURVIVAL' ? (
           /* Survival Mode Stats */
           <div className="w-full flex justify-center text-center text-[11px] border-b border-zinc-850 pb-3">
@@ -354,7 +355,7 @@ export default function GameScreen({
               </span>
             </div>
             <div className="w-full h-1.5 bg-zinc-950 rounded overflow-hidden">
-              <div 
+              <div
                 className={`h-full transition-all duration-75 ${isTimeCritical ? 'bg-red-500' : 'bg-blue-500'}`}
                 style={{ width: `${progressRatio * 100}%` }}
               />
@@ -369,7 +370,7 @@ export default function GameScreen({
               </span>
             </div>
             <div className="w-full h-1.5 bg-zinc-950 rounded overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-blue-500 transition-all duration-150"
                 style={{ width: `${(streak / SPRINT_CHAR_COUNT) * 100}%` }}
               />
@@ -379,9 +380,9 @@ export default function GameScreen({
       </div>
 
       <div className="text-[10px] text-zinc-650 text-center uppercase tracking-wider">
-        {gameMode === 'SURVIVAL' 
+        {gameMode === 'SURVIVAL'
           ? 'Timer gets shorter with each correct letter! Maintain your streak!'
-          : `Rush exactly ${SPRINT_CHAR_COUNT} letters quickly. Any single key error instantly restarts/fails.`
+          : `Rush exactly ${SPRINT_CHAR_COUNT} letters quickly. Any single key error instantly fails.`
         }
       </div>
     </div>
